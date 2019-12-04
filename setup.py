@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='csepy',
-     version='0.0.1.0',
+     version='0.0.1.1',
      author="Yuval Feldman",
      author_email="csepyproject@gmail.com",
      description="A python command service engine package",

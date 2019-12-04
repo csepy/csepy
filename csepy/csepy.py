@@ -4,6 +4,14 @@ from csepy.System.Models.Context.ContextFactory import GetContext
 from os.path import dirname
 
 
+functionsPackagePaths = []
+
+
+def Subscribe(path):
+    if path:
+        functionsPackagePaths.append(path)
+
+
 def InitAndGetContext(root, functionsPackagePath=None):
     CreatePublicEndpointMap(root, functionsPackagePath)
     context = GetContext()
@@ -16,13 +24,12 @@ def EnqueueAndRun(context, request=""):
     context.CommandQueue.RunCommands()
 
 
-def Start(functionsPackagePath=None, sysargs=None):
+def Start(pathList=None, sysargs=None):
     root = dirname(__file__)
-    paths = []
-    if functionsPackagePath and len(functionsPackagePath) > 0:
-        for i in functionsPackagePath:
-            paths.append(i)
-    context = InitAndGetContext(root, paths)
+    if pathList and len(pathList) > 0:
+        for path in pathList:
+            Subscribe(path)
+    context = InitAndGetContext(root, functionsPackagePaths)
     if sysargs and len(sysargs) > 1:
         EnqueueAndRun(context, " ".join(sysargs[1:]))
     while True:
