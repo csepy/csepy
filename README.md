@@ -4,19 +4,12 @@ Welcome to the CSEPY environment.
 
 Please note that Csepy and this readme are a work in progress and not yet ready for production use.
 
-## Installation
-***
-
-```bash
-Installation instructions coming soon...
-```
-
 
 ## What is Csepy?
 ***
 
 Csepy is designed to make it simple to create and manage large and complex services with ease. Csepy's goal is to
-separate the service infrastructure from the services logic base to allow then developer a strong base they can stand on
+separate the service infrastructure from the services logic base to allow developers a strong base they can rely on
 and requires them to only program specific service capabilities.
 
 Csepy uses a combination of reflection, dynamic importation, command pattern, context passing and command queueing to 
@@ -54,6 +47,96 @@ is yours.
  By following Csepy's language design you can connect multiple commands and make different features recognize one
  another while keeping all methods used ignorant of the others allowing very powerful combinations while keeping the
  service architecture clean.
+
+
+## Installation
+***
+
+Note: These installation steps assume that you are on a Linux or Mac environment. If you are on Windows, you will need to remove sudo to run the commands below.
+
+Install csepy via pip: 
+```bash
+Linux:      sudo pip install csepy
+Windows:         pip install csepy
+```
+
+In the python file that will be run add the code to instantiate and start csepy:
+1. Get the path to the projects root (the path to the folder under which all other files are located)
+```bash
+from csepy import csepy as cse
+from os.path import dirname
+
+
+root = f"{dirname(__file__)}\\"
+```
+
+2. Subscribe the path to the root:
+```bash
+from csepy import csepy as cse
+from os.path import dirname
+
+
+root = f"{dirname(__file__)}\\"
+cse.Subscribe(root)
+```
+
+3. Add the start csepy command (this is the command the service must use to start up):
+```bash
+from csepy import csepy as cse
+from os.path import dirname
+
+
+root = f"{dirname(__file__)}\\"
+cse.Subscribe(root)
+se.Start([root])
+```
+
+Note! You can subscribe multiple paths to create a service from multiple project bases.
+Note! You can pass the paths to the projects you wish to import as a list to the Start function. 
+
+
+4. Add logic classes that inherit from the ICommand class:
+```bash
+class myCommand(ICommand):
+    def Execute_Windows(self):
+        // code will be called on windows machines
+
+    def Execute_Linux(self):
+        // code will be called on linux machines
+
+
+myCommand.PublicFacing = "exposed_api_name"
+myCommand.MinRequestParameters = 1
+myCommand.Help = "long help description"
+myCommand.ShortHelp = "short help description"
+```
+
+Note! The logic classes dont have to be near or referenced by any class or part of the service in order for them to be
+dynamically added as long as their under one of the root directories subscribed to.
+In addition, changing the api's name only requires changing the PublicFacing parameter value and moving the entire 
+folder requires no reference updates as long as it remains under one of the subscribed root directories.
+
+5. run the file with the csepy start command, call the public facing api methods you declared and add the parameters
+just like calling command line functions:
+```bash
+exposed_api_name param1 param2 param3....
+```
+
+Note! you can also call the file directly as a command line action by passing sysarg parameters to the start function:
+```bash
+from csepy import csepy as cse
+from os.path import dirname
+
+
+root = f"{dirname(__file__)}\\"
+cse.Subscribe(root)
+
+if len(sys.argv) > 1:
+    Start(sysargs=sys.argv)
+elif __name__ == '__main__':
+    Start()
+```
+
 
 
 ## Csepy Deep dive
