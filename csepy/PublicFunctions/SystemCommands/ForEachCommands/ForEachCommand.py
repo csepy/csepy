@@ -4,13 +4,7 @@ from csepy.PublicFunctions.SystemCommands.ForEachCommands.ForEachLogic import Fo
 
 
 class ForEachCommand(ICommand):
-    def Execute_Windows(self):
-        self.PopulateForEachCommands()
-
-    def Execute_Linux(self):
-        self.PopulateForEachCommands()
-
-    def PopulateForEachCommands(self):
+    def Execute(self):
         newCommands = ForEachLogic().GetNewCommands(self.request)
         self.context.CommandQueue.EnqueueCommandsNext(newCommands)
 

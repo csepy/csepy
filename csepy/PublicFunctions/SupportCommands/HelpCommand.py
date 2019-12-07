@@ -4,13 +4,7 @@ from csepy.System.EndpointMap.EndpointMapper import CommandMapping
 
 
 class HelpCommand(ICommand):
-    def Execute_Windows(self):
-        self.GlobalHelp()
-
-    def Execute_Linux(self):
-        self.GlobalHelp()
-
-    def GlobalHelp(self):
+    def Execute(self):
         helpText = "\n".join(["\t\t{0:30}{1}".format(command, CommandMapping[command].ShortHelp)
                               for command in CommandMapping if command != "help"])
         helpText = f"Public functions available. for more information type " \

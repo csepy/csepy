@@ -4,13 +4,7 @@ from csepy.System.MultiProcessing.MultiProcessing import RunCommandsAsync
 
 
 class AsyncCommand(ICommand):
-    def Execute_Windows(self):
-        self.RunAsync()
-
-    def Execute_Linux(self):
-        self.RunAsync()
-
-    def RunAsync(self):
+    def Execute(self):
         RunCommandsAsync(self.request)
 
 

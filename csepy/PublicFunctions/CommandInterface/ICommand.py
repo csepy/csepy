@@ -8,39 +8,28 @@ class ICommand(metaclass=abc.ABCMeta):
         self.request = request
         self.context = context
 
+    @abc.abstractmethod
     def Execute(self):
+        pass
+
+    def PreExecute(self):
         self.context.Logger.DEBUG(f"Running command '{self.PublicFacing}' with parameters {str(self.request)}")
         if self.request and len(self.request) > 0 and "--help" in self.request:
-            self.RunHelpCommand()
-            return
+            self.RunHelpCommand(self.context, self.Help)
+            return False
         if not self.ValidateRequestContainsMinimumRequiredParameters(self.MinRequestParameters):
             self.context.Logger.WARN(f"Missing required parameters (min amount: {self.MinRequestParameters})")
-            return
-        self.RunCommandBasedOnOperatingSystem()
-
-    def ValidateRequestContainsMinimumRequiredParameters(self, minParams=0):
-        requestHasAtLeastMinRequiredParams = True if (minParams == 0) or (self.request and len(self.request) >= minParams) else False
-        return requestHasAtLeastMinRequiredParams
-
-    def RunCommandBasedOnOperatingSystem(self):
-        if str.lower(self.context.OsModel.OperatingSystemName) == "windows":
-            self.Execute_Windows()
-        elif str.lower(self.context.OsModel.OperatingSystemName) == "linux":
-            self.Execute_Linux()
-        else:
-            self.context.Logger.WARN("unsupported OS")
-            return
-
-    def RunHelpCommand(self):
-        self.context.Logger.INFO('\t\t'.join(('\t\t' + self.Help.lstrip()).splitlines(True)))
+            return False
+        return True
 
     def RunShellCommand(self, command):
         RunSubProcess(command, self.context.Logger)
 
-    @abc.abstractmethod
-    def Execute_Windows(self):
-        pass
+    def ValidateRequestContainsMinimumRequiredParameters(self, minParams=0):
+        requestHasAtLeastMinRequiredParams = True if (minParams == 0) or (
+                self.request and len(self.request) >= minParams) else False
+        return requestHasAtLeastMinRequiredParams
 
-    @abc.abstractmethod
-    def Execute_Linux(self):
-        pass
+    def RunHelpCommand(self, help):
+        self.context.Logger.INFO('\t\t'.join(('\t\t' + help.lstrip()).splitlines(True)))
+

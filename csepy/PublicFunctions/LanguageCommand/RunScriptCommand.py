@@ -4,13 +4,7 @@ from csepy.System.Language.SystemLanguage import SLI
 
 
 class RunScript(ICommand):
-    def Execute_Windows(self):
-        self.RunScriptFile()
-
-    def Execute_Linux(self):
-        self.RunScriptFile()
-
-    def RunScriptFile(self):
+    def Execute(self):
         scriptPath = self.request[0]
         sli = SLI(self.context)
         sli.RunScript(scriptPath)
