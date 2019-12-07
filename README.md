@@ -98,11 +98,8 @@ Note! You can pass the paths to the projects you wish to import as a list to the
 4. Add logic classes that inherit from the ICommand class:
 ```bash
 class myCommand(ICommand):
-    def Execute_Windows(self):
-        // code will be called on windows machines
-
-    def Execute_Linux(self):
-        // code will be called on linux machines
+    def Execute(self):
+        // this code will be called
 
 
 myCommand.PublicFacing = "exposed_api_name"
