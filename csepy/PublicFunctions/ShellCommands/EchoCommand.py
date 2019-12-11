@@ -3,13 +3,7 @@ from csepy.PublicFunctions.CommandInterface.ICommand import ICommand
 
 
 class EchoCommand(ICommand):
-    def Execute_Windows(self):
-        self.Echo()
-
-    def Execute_Linux(self):
-        self.Echo()
-
-    def Echo(self):
+    def Execute(self):
         self.RunShellCommand(f"echo {' '.join(self.request)}")
 
 

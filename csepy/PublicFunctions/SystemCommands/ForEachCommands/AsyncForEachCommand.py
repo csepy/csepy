@@ -5,13 +5,7 @@ from csepy.System.MultiProcessing.MultiProcessing import RunCommandsAsync
 
 
 class AsyncForEachCommand(ICommand):
-    def Execute_Windows(self):
-        self.PopulateAsyncForEachCommands()
-
-    def Execute_Linux(self):
-        self.PopulateAsyncForEachCommands()
-
-    def PopulateAsyncForEachCommands(self):
+    def Execute(self):
         newCommands = ForEachLogic().GetNewCommands(self.request)
         RunCommandsAsync(newCommands)
 

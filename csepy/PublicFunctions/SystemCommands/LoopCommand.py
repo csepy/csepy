@@ -3,13 +3,7 @@ from csepy.PublicFunctions.CommandInterface.ICommand import ICommand
 
 
 class LoopCommand(ICommand):
-    def Execute_Windows(self):
-        self.Loop()
-
-    def Execute_Linux(self):
-        self.Loop()
-
-    def Loop(self):
+    def Execute(self):
         loopTimes = self.request[0]
         loopCommand = " ".join(self.request[1:])
         try:

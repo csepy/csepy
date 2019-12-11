@@ -14,13 +14,7 @@ TimeConversionsFromSeconds = {
 
 
 class WaitCommand(ICommand):
-    def Execute_Windows(self):
-        self.Wait()
-
-    def Execute_Linux(self):
-        self.Wait()
-
-    def Wait(self):
+    def Execute(self):
         timeParam = self.request[0]
         if not re.match(timeRegex, timeParam):
             self.context.Logger.ERROR(f"Parameter passed '{timeParam}' not valid")

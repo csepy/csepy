@@ -60,7 +60,8 @@ class CommandQueue:
         while self.CommandQueueNotEmpty():
             command = self.DeQueueCommand()
             try:
-                command.Execute()
+                if command.PreExecute():
+                    command.Execute()
             except Exception as ex:
                 self.context.Logger.ERROR(f"Encountered error executing command:\n{ex}\nEmptying command queue")
                 self.EmptyCommandQueue()
