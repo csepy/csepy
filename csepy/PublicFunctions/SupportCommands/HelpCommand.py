@@ -14,3 +14,4 @@ class HelpCommand(ICommand):
 
 
 HelpCommand.PublicFacing = "help"
+HelpCommand.Help = "Lists all public facing commands in service with short descriptions for each command"

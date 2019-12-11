@@ -39,6 +39,6 @@ class ICommand(metaclass=abc.ABCMeta):
         return self.request and len(self.request) > 0 and "--help" in self.request
 
     def RunHelpCommand(self):
-            helpText = self.Help if hasattr(self, "Help") else "asd"
+            helpText = self.Help if hasattr(self, "Help") else ""
             self.context.Logger.INFO('\t\t'.join(('\t\t' + helpText.lstrip()).splitlines(True)))
 
