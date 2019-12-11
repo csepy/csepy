@@ -14,22 +14,31 @@ class ICommand(metaclass=abc.ABCMeta):
 
     def PreExecute(self):
         self.context.Logger.DEBUG(f"Running command '{self.PublicFacing}' with parameters {str(self.request)}")
-        if self.request and len(self.request) > 0 and "--help" in self.request:
-            self.RunHelpCommand(self.context, self.Help)
+
+        if self.HelpCommandRequested():
+            self.RunHelpCommand()
             return False
-        if not self.ValidateRequestContainsMinimumRequiredParameters(self.MinRequestParameters):
-            self.context.Logger.WARN(f"Missing required parameters (min amount: {self.MinRequestParameters})")
+
+        if not self.RequestHasMinRequiredParameters():
             return False
+
         return True
 
     def RunShellCommand(self, command):
         RunSubProcess(command, self.context.Logger)
 
-    def ValidateRequestContainsMinimumRequiredParameters(self, minParams=0):
-        requestHasAtLeastMinRequiredParams = True if (minParams == 0) or (
-                self.request and len(self.request) >= minParams) else False
+    def RequestHasMinRequiredParameters(self):
+        minParametersForRequest = self.MinRequestParameters if hasattr(self, "MinRequestParameters") else 0
+        requestHasAtLeastMinRequiredParams = (minParametersForRequest == 0) or (
+                self.request and len(self.request) >= minParametersForRequest)
+        if not requestHasAtLeastMinRequiredParams:
+            self.context.Logger.WARN(f"Missing required parameters (min amount: {minParametersForRequest})")
         return requestHasAtLeastMinRequiredParams
 
-    def RunHelpCommand(self, help):
-        self.context.Logger.INFO('\t\t'.join(('\t\t' + help.lstrip()).splitlines(True)))
+    def HelpCommandRequested(self):
+        return self.request and len(self.request) > 0 and "--help" in self.request
+
+    def RunHelpCommand(self):
+            helpText = self.Help if hasattr(self, "Help") else "asd"
+            self.context.Logger.INFO('\t\t'.join(('\t\t' + helpText.lstrip()).splitlines(True)))
 
