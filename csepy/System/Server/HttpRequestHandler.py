@@ -2,24 +2,26 @@
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from io import BytesIO
 from time import sleep
+import array
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        sleep(10)
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b'Hello, world!')
+        self.Reply(200, f"HelloWorld get: {self.path}")
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         body = self.rfile.read(content_length)
-        self.send_response(200)
+
+        self.Reply(200, f"HelloWorld post: {self.path} + {body}")
+
+    def Reply(self, errorCode, message):
+        bMessage = bytearray()
+        bMessage.extend(map(ord, message))
+        self.send_response(errorCode)
         self.end_headers()
         response = BytesIO()
-        response.write(b'This is POST request. ')
-        response.write(b'Received: ')
-        response.write(body)
+        response.write(bMessage)
         self.wfile.write(response.getvalue())
 
 
